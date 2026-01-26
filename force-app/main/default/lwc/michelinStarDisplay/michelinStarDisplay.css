@@ -1,0 +1,11 @@
+:host {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.michelin-star {
+  margin-right: 0.5rem;
+  height: inherit;
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>Help user to list all restaurants and create bookings</description>
+    <developerName>Restaurants_Management</developerName>
+    <genAiFunctions>
+        <functionName>Search_Restaurants</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>Always use these actions to manage restaurants</description>
+        <developerName>instruction_alwaysuset0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_alwaysuset0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>Restaurants_Management</localDeveloperName>
+    <masterLabel>Restaurants Management</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to help managing restaurants</scope>
+</GenAiPlugin>

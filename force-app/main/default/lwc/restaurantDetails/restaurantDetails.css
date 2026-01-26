@@ -1,0 +1,26 @@
+:host {
+  --slds-c-card-sizing-border: solid;
+  --slds-c-card-color-border: var(--slds-g-color-border-1);
+}
+
+.restaurant-card {
+  display: block;
+  margin-block-end: var(--slds-g-spacing-4);
+}
+
+.field-value {
+  color: var(--slds-g-color-neutral-base-10);
+}
+
+a {
+  text-decoration: none;
+  text-wrap: auto;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+c-michelin-star-display {
+  height: 1.3rem;
+}

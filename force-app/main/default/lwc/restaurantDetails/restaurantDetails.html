@@ -1,0 +1,15 @@
+<template>
+  <template for:each={restaurantsData} for:item="restaurant">
+    <lightning-card key={restaurant.id} class="restaurant-card">
+      <a href={restaurant.link} slot="title" onclick={handleNavigation} data-restaurant-id={restaurant.id}>{restaurant.name}</a>
+      <div slot="actions"><c-michelin-star-display number-of-stars={restaurant.stars}></c-michelin-star-display></div>
+      <div class="slds-p-horizontal_small">
+        <div>{typeOfCuisineLabel}: <span class="field-value">{restaurant.cuisine}</span></div>
+        <div>{priceRangeLabel}: <span class="field-value">{restaurant.price}</span></div>
+      </div>
+      <div slot="footer">
+        <lightning-button variant="brand" label="Book Now" onclick={handleBooking} data-restaurant-id={restaurant.id}></lightning-button>
+      </div>
+    </lightning-card>
+  </template>
+</template>

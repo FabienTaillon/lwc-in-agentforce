@@ -1,0 +1,5 @@
+{
+  "title" : "My Restaurant Response",
+  "description" : "My Restaurant Response",
+  "lightning:type" : "@apexClassType/c__RestaurantService$Restaurants"
+}

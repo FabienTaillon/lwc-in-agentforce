@@ -1,0 +1,97 @@
+{
+  "attributes": {
+    "type": "Restaurant__c"
+  },
+  "records": [
+    {
+      "attributes": {
+        "type": "Restaurant__c",
+        "referenceId": "RestaurantRef1"
+      },
+      "Name": "Blind",
+      "NumberOfStars__c": "1",
+      "Address__Street__s": "Rua de Entreparedes 40",
+      "Address__City__s": "Porto",
+      "Address__PostalCode__s": "4000-197",
+      "Address__CountryCode__s": "PT",
+      "PriceRange__c": "€€€€",
+      "TypeOfCuisine__c": "Creative",
+      "Description__c": "This is one of those places where you seek more than just a meal — you seek produce, flavour, technique... and a culinary experience that moves you; not surprisingly, they wanted to pay tribute to José Saramago’s famous work “Blindness” and build their ethos around three concepts that play with the senses: Feel, Touch and Provoke. This restaurant, inside the Torel Palace hotel, is overseen by Chef Vítor Matos and run day-to-day by the young Chef Rita Magro. Here they champion a cuisine guided by common sense, serious in presentation yet playful (they offer a few blind tastings), with plating not devoid of a theatrical touch. The concept involves a single surprise tasting menu, called Blind Emotions, with two variations: one featuring 10 courses and another with 12. They may surprise you with lit butter candles, the tinkling of a Swiss cowbell, or a Polaroid photo while you’re blindfolded... Do you accept the challenge?",
+      "Website__c": "http://www.blind.pt",
+      "PhoneNumber__c": "+351 22 600",
+      "PetAllowed__c": false
+    },
+    {
+      "attributes": {
+        "type": "Restaurant__c",
+        "referenceId": "RestaurantRef2"
+      },
+      "Name": "Le Monument",
+      "NumberOfStars__c": "1",
+      "Address__Street__s": "Av. dos Aliados 151",
+      "Address__City__s": "Porto",
+      "Address__PostalCode__s": "4000-067",
+      "Address__CountryCode__s": "PT",
+      "PriceRange__c": "€€€€",
+      "TypeOfCuisine__c": "Contemporary",
+      "Description__c": "If you feel like going on a high-flying culinary adventure, you will find a magnificent option here, as the luxurious Le Monumental Palace hotel provides the perfect setting. French chef Julien Montbabut, who already reached Michelin star status in Paris, rethinks his concept to take us on a grand culinary journey through Portugal’s various regions. He revisits each region’s classic recipes from his own perspective and lends a touch of modern cuisine and a deep respect for flavours to dishes based on native ingredients. The experience is presented in two versions: Grande viagem [“Grand Journey”] (7 courses) and Passeio [“Stroll”] (5 courses). Both come with the chef’s signature dish, Sapateira (brown crab), which combines Savora mustard and yuzu, blending sweet, acidic and marine notes in an extremely delicate presentation. To conclude the journey, allow yourself to be surprised by the delicious infusions made from herbs and plants chosen by the chef — you definitely will not regret it!",
+      "Website__c": "https://www.maison-albar-hotels-le-monumental-palace.com/en/page/monument-hotel-porto.3809.html",
+      "PhoneNumber__c": "+351 22 766 2411",
+      "PetAllowed__c": false
+    },
+    {
+      "attributes": {
+        "type": "Restaurant__c",
+        "referenceId": "RestaurantRef3"
+      },
+      "Name": "Le Pré Catelan",
+      "NumberOfStars__c": "3",
+      "Address__Street__s": "Route de Suresnes - bois de Boulogne",
+      "Address__City__s": "Paris",
+      "Address__PostalCode__s": "75016",
+      "Address__CountryCode__s": "FR",
+      "PriceRange__c": "€€€€",
+      "TypeOfCuisine__c": "Contemporary;Creative",
+      "Description__c": "How time flies! Frédéric Anton has been the chef of the Pré Catalan, the legendary Napoleon III lodge nestled in the Bois de Boulogne and refurbished by Pierre-Yves Rochon courtesy of designer furniture and a palette of green, white and silver tones, for over 25 years. Born in Nancy, this celebrity chef and Meilleur Ouvrier de France learned the ropes under Joël Robuchon. His tasting menu, which stars top-drawer produce (scallops, langoustine, salmon, caviar) is a masterclass of high-flying understatement and razor-sharp precision. His culinary score, which rises to a crescendo of pure perfection, bears witness to the chef’s experience and vision of fine dining. Not to be missed.",
+      "Website__c": "https://www.leprecatelan.com",
+      "PhoneNumber__c": "+33 1 44 14 41 14",
+      "PetAllowed__c": false
+    },
+    {
+      "attributes": {
+        "type": "Restaurant__c",
+        "referenceId": "RestaurantRef4"
+      },
+      "Name": "Ze Kitchen Galerie",
+      "NumberOfStars__c": "1",
+      "Address__Street__s": "4 rue des Grands-Augustins",
+      "Address__City__s": "Paris",
+      "Address__PostalCode__s": "75006",
+      "Address__CountryCode__s": "FR",
+      "PriceRange__c": "€€€€",
+      "TypeOfCuisine__c": "Creative",
+      "Description__c": "Over 20 years old and still going strong: William Ledeuil's Ze Kitchen Galerie flirts with the boundaries between art and cuisine, with all of its original freshness and enthusiasm intact. In this pared-back space, designer furniture and tableware coexist with colourful paintings (a decor designed with jazz musician Daniel Humair) around a windowed kitchen where you can see the team at work. At the stove is William Ledeuil, who has become the mentor of a generation of chefs (including Adeline Grattard and Adrien Ferrand). He gives free rein to his passion for the flavours of South-East Asia (Thailand, Vietnam), which provide him with plenty of inspiration. Galangal, ka-chai, turmeric, wasabi, ginger are just some of the herbs, roots, spices and condiments from around the world that he uses to brilliantly enhance classic French recipes. The menu – based on fish, broths, pasta and a la plancha options – comprises a range of inventive, modern and nicely crafted dishes that will take you on a journey of flavours and colours. The lunch menu is unbeatable value; a warm welcome and smiling service.",
+      "Website__c": "https://www.zekitchengalerie.fr",
+      "PhoneNumber__c": "+33 1 44 32 00 32",
+      "PetAllowed__c": false
+    },
+    {
+      "attributes": {
+        "type": "Restaurant__c",
+        "referenceId": "RestaurantRef5"
+      },
+      "Name": "La Dame de Pic",
+      "NumberOfStars__c": "1",
+      "Address__Street__s": "20 rue du Louvre",
+      "Address__City__s": "Paris",
+      "Address__PostalCode__s": "75001",
+      "Address__CountryCode__s": "FR",
+      "PriceRange__c": "€€€€",
+      "TypeOfCuisine__c": "Creative",
+      "Description__c": "Un bel atout dans la cartographie des bonnes tables parisiennes : Anne-Sophie Pic a créé à deux pas du Louvre, cette table... capitale. À 550 km de Valence, où son nom a tant marqué l'histoire de la cuisine (ses père et grand-père y conquirent eux aussi trois étoiles Michelin), mais au cœur de sa griffe originale. Un travail en finesse, en précision, doublé d'une inspiration pleine de vivacité : telle est la signature de cette grande dame de la gastronomie. On retrouve son sens de l'harmonie des saveurs, de la fraîcheur et de l'exactitude, avec toujours ces cuissons et assaisonnements au cordeau : berlingots au camembert fermier fumé, oignons doux des Cévennes, consommé lié à la feuille de figuier et camomille ; pigeonneau de Racan imprégné à la lavande et feuille de faustrime, maïs de Nérac en différentes textures, jus corsé ; pomme reinette confite au balsamique de pomme, sobacha, whisky et caramel...",
+      "Website__c": "https://anne-sophie-pic.com/paris/",
+      "PhoneNumber__c": "+33 1 42 60 40 40",
+      "PetAllowed__c": false
+    }
+  ]
+}
