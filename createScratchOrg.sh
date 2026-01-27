@@ -11,6 +11,7 @@ echo '##### DEPLOYING POST PUSH METADATA (ACTIVE LIGHTNING THEME) #####'
 sf project deploy start --source-dir ./post-push-source --ignore-conflicts --target-org $SCRATCH_ALIAS
 echo '##### ASSIGNING PERMISSIONS #####'
 sf org assign permset --name Restaurants_Management --target-org $SCRATCH_ALIAS
+sf org assign permset --name EinsteinGPTPromptTemplateManager --target-org $SCRATCH_ALIAS
 echo '##### IMPORTING DUMMY DATA #####'
 sf texei data import --inputdir ./data --target-org $SCRATCH_ALIAS
 echo '##### CLEANING STANDARD LAYOUTS #####'
