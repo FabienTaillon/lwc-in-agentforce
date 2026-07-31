@@ -3,7 +3,7 @@ public with sharing class RestaurantService {
   public static List<RestaurantsResponse> searchRestaurants(List<RestaurantRequest> restaurantRequest) {
     System.debug('restaurantRequest: ' + restaurantRequest);
     List<Restaurant__c> restaurants = new List<Restaurant__c>();
-    restaurants = [SELECT Id, NumberOfStars__c, TypeOfCuisine__c, PriceRange__c FROM Restaurant__c WHERE Address__City__s = :restaurantRequest.get(0).city WITH USER_MODE];
+    restaurants = [SELECT Id, Name, NumberOfStars__c, TypeOfCuisine__c, PriceRange__c FROM Restaurant__c WHERE Address__City__s = :restaurantRequest.get(0).city WITH USER_MODE];
 
     RestaurantsResponse restaurantsResponse = new RestaurantsResponse();
     Restaurants restos = new Restaurants();

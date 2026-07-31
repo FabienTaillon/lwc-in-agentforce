@@ -7,7 +7,9 @@ SCRATCH_ALIAS="${SCRATCH_ALIAS:-$PROJECT_NAME-`git branch | grep \* | cut -d ' '
 sf org create scratch --definition-file config/project-scratch-def.json --alias $SCRATCH_ALIAS --wait 15 --set-default
 echo '##### PUSHING METADATA #####'
 sf project deploy start --ignore-conflicts --target-org $SCRATCH_ALIAS
-echo '##### DEPLOYING POST PUSH METADATA (ACTIVE LIGHTNING THEME) #####'
+echo '##### PUBLISHING AGENT (AGENT SCRIPT BUNDLE) #####'
+sf agent publish authoring-bundle --api-name Restaurant_Agent --skip-retrieve --target-org $SCRATCH_ALIAS
+echo '##### DEPLOYING POST PUSH METADATA (ACTIVE LIGHTNING THEME, PERMSET REFERENCING AGENT) #####'
 sf project deploy start --source-dir ./post-push-source --ignore-conflicts --target-org $SCRATCH_ALIAS
 echo '##### ASSIGNING PERMISSIONS #####'
 sf org assign permset --name Restaurants_Management --target-org $SCRATCH_ALIAS
