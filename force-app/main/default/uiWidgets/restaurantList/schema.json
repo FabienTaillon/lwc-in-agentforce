@@ -1,6 +1,6 @@
 {
   "title": "Restaurant List Widget",
-  "description": "Attribute contract: the list of RestaurantService.Restaurant DTOs returned by RestaurantService (Restaurants.listRestaurants).",
+  "description": "Attribute contract: the list of RestaurantService.Restaurant DTOs returned by RestaurantService (Restaurants.listRestaurants). Field names must match the Apex DTO exactly.",
   "type": "object",
   "properties": {
     "attributes": {
@@ -8,7 +8,7 @@
       "properties": {
         "restaurants": {
           "title": "Restaurants",
-          "description": "Restaurants returned by RestaurantService (RestaurantService.Restaurant DTOs). A lightning__listType attribute requires an items sub-schema (deploy validator: '$.properties.attributes.properties.restaurants.items: is missing but it is required').",
+          "description": "Restaurants returned by RestaurantService (RestaurantService.Restaurant DTOs). A lightning__listType attribute requires an items sub-schema.",
           "lightning:type": "lightning__listType",
           "items": {
             "title": "Restaurant",
@@ -35,36 +35,13 @@
               "priceRange": {
                 "title": "Price range",
                 "lightning:type": "lightning__textType"
-              },
-              "Id": {
-                "title": "Record Id (deprecated)",
-                "description": "DEPRECATED, kept only because the deploy validator refuses to delete a property of a published widget schema ('Schema update contains breaking changes'). Not bound by the widget.",
-                "lightning:type": "lightning__textType"
-              },
-              "Name": {
-                "title": "Name (deprecated)",
-                "description": "DEPRECATED, kept only because the deploy validator refuses to delete a property of a published widget schema ('Schema update contains breaking changes'). Not bound by the widget.",
-                "lightning:type": "lightning__textType"
-              },
-              "NumberOfStars__c": {
-                "title": "Michelin stars (deprecated)",
-                "description": "DEPRECATED, kept only because the deploy validator refuses to delete a property of a published widget schema ('Schema update contains breaking changes'). Not bound by the widget.",
-                "lightning:type": "lightning__textType"
-              },
-              "TypeOfCuisine__c": {
-                "title": "Type of cuisine (deprecated)",
-                "description": "DEPRECATED, kept only because the deploy validator refuses to delete a property of a published widget schema ('Schema update contains breaking changes'). Not bound by the widget.",
-                "lightning:type": "lightning__textType"
-              },
-              "PriceRange__c": {
-                "title": "Price range (deprecated)",
-                "description": "DEPRECATED, kept only because the deploy validator refuses to delete a property of a published widget schema ('Schema update contains breaking changes'). Not bound by the widget.",
-                "lightning:type": "lightning__textType"
               }
-            }
+            },
+            "additionalProperties": false
           }
         }
-      }
+      },
+      "additionalProperties": false
     }
   }
 }

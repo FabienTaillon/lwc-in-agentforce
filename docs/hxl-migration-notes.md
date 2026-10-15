@@ -1069,3 +1069,44 @@ Le `SKILL.md` renvoie au repo public `github.com/forcedotcom/sf-skills` (skills 
   CLT »). Un CLT Apex ne contient que `title`, `description`, `lightning:type` (pas de `type`/`properties`).
 - Aucun des quatre skills ne couvre `complex_data_type_name` / Agent Script ni l'Output Rendering : nos
   constats §18.1 et §18.4 restent de première main.
+
+## 20. Recréation propre du widget sur la dev org (2026-10-15)
+
+Objectif : sortir les cinq propriétés dépréciées du `schema.json` du widget (§18.3) et ajouter
+`additionalProperties: false` sur `attributes` et `items` (§19), deux changements refusés comme
+breaking changes sur un widget publié. Seule voie : supprimer le widget de l'org et le recréer.
+
+Recette qui a marché, sans toucher au `McpServerDefinition` ni à l'agent :
+
+1. `sf project deploy validate` avec un `destructiveChangesPre.xml` contenant le seul
+   `UiWidgetBundle restaurantList` → refus verbatim :
+   `This UI Widget is referenced elsewhere in Salesforce. : The UI Widget Restaurant List is used in
+   restaurantSearchMcpResult. Remove the reference before deleting.` (idem pour `restaurantHxlResponse`).
+   Le `McpServerDefinition` (`uiResource` / `resourceUri` vers le CLT) n'est pas listé comme bloquant.
+2. Lever les références sans supprimer les CLT : déplacer les deux `renderer.json` hors du repo et
+   redéployer les deux bundles `restaurantHxlResponse` et `restaurantSearchMcpResult` (`--source-dir`).
+   Le deploy d'un `LightningTypeBundle` remplace le bundle entier : le renderer absent en source est
+   retiré de l'org (« Changed », un seul fichier `schema.json` dans le rapport).
+3. Revalider : plus d'erreur de référence. Le `validate` échoue alors sur
+   `Average test coverage across all Apex Classes and Triggers is 0%, at least 75% test coverage is
+   required` : `sf project deploy validate` force `RunLocalTests` même hors production. Exécuter la
+   suppression avec `sf project deploy start --pre-destructive-changes … --manifest <package.xml vide>`
+   (NoTestRun par défaut sur une org non-prod) → `Deleted UiWidgetBundle restaurantList`.
+4. Réécrire `schema.json` (cinq propriétés `id`, `name`, `stars`, `cuisine`, `priceRange`,
+   `additionalProperties: false` aux deux niveaux) et redéployer le widget → `Created`, nouvel Id
+   (`1idbm…CpBAAU` à la place de `1idbm…BptAAE`).
+5. Remettre les deux `renderer.json` et redéployer les deux CLT → `Changed` (renderer + schema).
+   Contrôle : un nouveau `validate` de suppression est refusé pour les deux mêmes références, preuve que
+   les CLT pointent sur le widget recréé.
+
+Choix sur `items` : le méta-schéma du bundle Playground (`widget-schema.meta.schema.json`) ferme
+`lightning:type` sur les six types standards ; `@apexClassType/…` en `items` (doc sf-skills, §19) n'y
+figure pas. Comme chaque changement d'`items` coûte une recréation, le widget garde des `items`
+explicites, valides contre le méta-schéma, aux noms exactement ceux du DTO Apex. TODO(unverified) :
+`items` en `@apexClassType/c__RestaurantService$Restaurant`, à essayer sur un widget jetable.
+
+Non retesté dans cette session : rendu Agentforce (Output Rendering = `Restaurant HXL Response`) et rendu
+dans Claude via le connecteur MCP. Le serveur MCP n'a pas été redéployé, son activation Setup devrait
+être intacte.
+
+Testé ensuite par l'utilisateur : rendu OK.
