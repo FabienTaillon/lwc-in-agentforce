@@ -43,3 +43,7 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# HXL: External Client App consumer key (scripts/hxl/setup-claude-mcp-app.sh) and deploy scratch dirs
+scripts/hxl/.env
+tmp-hxl*/

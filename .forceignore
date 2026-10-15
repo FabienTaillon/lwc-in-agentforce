@@ -12,3 +12,5 @@ package.xml
 **/__tests__/**
 
 **/profiles/*.profile-meta.xml
+# HXL
+**/.DS_Store

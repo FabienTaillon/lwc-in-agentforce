@@ -1,0 +1,12 @@
+{
+  "renderer": {
+    "componentOverrides": {
+      "$": {
+        "definition": "@widget/c/restaurantList",
+        "attributes": {
+          "restaurants": "{!$attrs.outputValues.restaurants.listRestaurants}"
+        }
+      }
+    }
+  }
+}

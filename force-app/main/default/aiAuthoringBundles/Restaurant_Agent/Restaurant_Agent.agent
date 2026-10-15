@@ -74,7 +74,6 @@ subagent Restaurant_Management:
             require_user_confirmation: False
             include_in_progress_indicator: True
             progress_indicator_message: "Searching restaurants"
-            source: "Search_Restaurants"
             target: "apex://RestaurantService"
                 
             inputs:

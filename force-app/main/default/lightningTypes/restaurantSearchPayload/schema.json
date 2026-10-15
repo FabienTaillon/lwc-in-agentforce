@@ -1,0 +1,15 @@
+{
+  "title": "Restaurant Search Payload",
+  "description": "Output values of the RestaurantService invocable action (MCP payload role): one property per @InvocableMethod output variable.",
+  "type": "object",
+  "lightning:type": "lightning__objectType",
+  "lightning:tags": ["mcp"],
+  "unevaluatedProperties": false,
+  "properties": {
+    "restaurants": {
+      "title": "Restaurants",
+      "description": "Restaurants found for the requested city",
+      "lightning:type": "@apexClassType/c__RestaurantService$Restaurants"
+    }
+  }
+}

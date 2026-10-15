@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<McpServerDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Searches restaurants by city and renders them with the restaurantList HXL widget in MCP clients (Claude, ChatGPT).</description>
+    <masterLabel>restaurant-search-server</masterLabel>
+    <tools>
+        <apiDefinition>
+            <apiIdentifier>aa:apex-RestaurantService</apiIdentifier>
+            <apiSource>API_CATALOG</apiSource>
+            <operation>RestaurantService</operation>
+        </apiDefinition>
+        <descriptionOverride>Search for restaurants in a given city. Returns name, cuisine, Michelin stars and price range.</descriptionOverride>
+        <destructive>false</destructive>
+        <idempotent>true</idempotent>
+        <openWorld>false</openWorld>
+        <readOnly>true</readOnly>
+        <returnDirect>false</returnDirect>
+        <toolName>RestaurantServiceapex_RestaurantService</toolName>
+        <toolTitle>Search Restaurants</toolTitle>
+        <uiResource>restaurantList</uiResource>
+    </tools>
+    <resources>
+        <resourceName>restaurantList</resourceName>
+        <resourceUri>ui://widget/lightningType/c__restaurantSearchMcpResult</resourceUri>
+        <resourceTitle>Restaurant List</resourceTitle>
+        <description>Widget listing the restaurants found, with a Book a table button per restaurant.</description>
+    </resources>
+</McpServerDefinition>

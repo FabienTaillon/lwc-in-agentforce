@@ -1,0 +1,5 @@
+{
+  "title": "Restaurant HXL Response",
+  "description": "Same Apex schema as c__restaurantResponse, rendered by the HXL widget c/restaurantList instead of the LWC. Select it as Output Rendering of Search Restaurants to switch to HXL.",
+  "lightning:type": "@apexClassType/c__RestaurantService$Restaurants"
+}
