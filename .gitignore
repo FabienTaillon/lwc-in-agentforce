@@ -47,3 +47,6 @@ $RECYCLE.BIN/
 # HXL: External Client App consumer key (scripts/hxl/setup-claude-mcp-app.sh) and deploy scratch dirs
 scripts/hxl/.env
 tmp-hxl*/
+
+# Claude Code: local settings and the Salesforce HXL Playground skill bundle (download it again from the Playground)
+.claude/
