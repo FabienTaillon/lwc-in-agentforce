@@ -88,13 +88,27 @@ export default class RestaurantDetails extends NavigationMixin(LightningElement)
       recordId: restaurantId
     });
 
-    if (bookingResult) {
-      // TODO: Save booking
-      const toastEvent = new ShowToastEvent({
-        title: "Success!",
-        message: "Restaurant booked successfully"
+    // Demo modes (see restaurantBookingModal): "lwc" books silently, "lwcNotify" books then
+    // tells the agent, "agent" only asks the agent to book. In "agent" mode the request shows up
+    // in the conversation itself, so no toast; in the two "lwc" modes the toast is the only
+    // feedback on the booking created by the component.
+    if (bookingResult && bookingResult.mode !== "agent") {
+      const titles = {
+        lwc: "Booked by the component, the agent does not know",
+        lwcNotify: "Booked by the component, the agent was told"
+      };
+      const url = await this[NavigationMixin.GenerateUrl]({
+        type: "standard__recordPage",
+        attributes: { recordId: bookingResult.bookingId, actionName: "view" }
       });
-      this.dispatchEvent(toastEvent);
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: titles[bookingResult.mode] || "Booking",
+          message: `Table booked at ${bookingResult.restaurantName} on ${bookingResult.date} at ${bookingResult.time}: {0}`,
+          messageData: [{ url, label: bookingResult.bookingReference }],
+          variant: "success"
+        })
+      );
     }
   }
 }

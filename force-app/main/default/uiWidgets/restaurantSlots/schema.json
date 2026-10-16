@@ -1,0 +1,55 @@
+{
+  "title": "Restaurant Slots Widget",
+  "description": "Attribute contract: the RestaurantAvailabilityService.Availability DTO (restaurant, date, available time slots). Field names must match the Apex DTO exactly.",
+  "type": "object",
+  "properties": {
+    "attributes": {
+      "lightning:type": "lightning__objectType",
+      "properties": {
+        "restaurantId": {
+          "title": "Restaurant Id",
+          "lightning:type": "lightning__textType"
+        },
+        "restaurantName": {
+          "title": "Restaurant name",
+          "lightning:type": "lightning__textType"
+        },
+        "bookingDate": {
+          "title": "Date",
+          "description": "YYYY-MM-DD, used in the booking message",
+          "lightning:type": "lightning__textType"
+        },
+        "bookingDateLabel": {
+          "title": "Date label",
+          "description": "Date formatted for display",
+          "lightning:type": "lightning__textType"
+        },
+        "hasSlots": {
+          "title": "Has slots",
+          "lightning:type": "lightning__booleanType"
+        },
+        "hasNoSlots": {
+          "title": "Has no slots",
+          "lightning:type": "lightning__booleanType"
+        },
+        "slots": {
+          "title": "Available slots",
+          "lightning:type": "lightning__listType",
+          "items": {
+            "title": "Slot",
+            "lightning:type": "lightning__objectType",
+            "properties": {
+              "startTime": {
+                "title": "Start time",
+                "description": "HH:mm",
+                "lightning:type": "lightning__textType"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

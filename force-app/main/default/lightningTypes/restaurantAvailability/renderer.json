@@ -1,0 +1,18 @@
+{
+  "renderer": {
+    "componentOverrides": {
+      "$": {
+        "definition": "@widget/c/restaurantSlots",
+        "attributes": {
+          "restaurantId": "{!$attrs.restaurantId}",
+          "restaurantName": "{!$attrs.restaurantName}",
+          "bookingDate": "{!$attrs.bookingDate}",
+          "bookingDateLabel": "{!$attrs.bookingDateLabel}",
+          "hasSlots": "{!$attrs.hasSlots}",
+          "hasNoSlots": "{!$attrs.hasNoSlots}",
+          "slots": "{!$attrs.slots}"
+        }
+      }
+    }
+  }
+}

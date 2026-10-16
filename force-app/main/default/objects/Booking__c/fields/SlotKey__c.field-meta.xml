@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SlotKey__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>Restaurant Id + booking date-time (UTC, to the minute). Unique: the database refuses two bookings on the same slot even if two transactions pass the Apex check at the same time. Filled by BookRestaurantService.createBooking.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Set automatically when the booking is created through the booking service.</inlineHelpText>
+    <label>Slot Key</label>
+    <length>80</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

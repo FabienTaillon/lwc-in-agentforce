@@ -1021,9 +1021,9 @@ d'abord dans Setup, ou garder `source:` et accepter la contrainte de concordance
 
 ## 19. Le bundle « hxl-widget-authoring » du Playground et le repo public sf-skills (2026-10-14)
 
-Zip téléchargeable depuis le HXL Playground, déposé dans `docs/hxl-widget-authoring/` : un **skill au format
+Zip téléchargeable depuis le HXL Playground, déposé dans `.claude/skills/hxl-widget-authoring/` : un **skill au format
 Claude Code** (`SKILL.md` + `references/` + `api/v68.0/`), version 0.0.1, sous Terms of Use Salesforce
-(pas une licence open source : à ne pas redistribuer dans un repo public sans vérifier). Contenu :
+(les Terms autorisent la redistribution si le fichier LICENSE accompagne la copie ; choix fait le 2026-10-15 de ne pas le committer, dossier `.claude/` ignoré). Contenu :
 méta-schéma du `schema.json` de widget, schéma JSON du payload de widget, un `.md` et un `.schema.json` par
 composant `tile/*` (22 composants, index dans `component-index.md`), `expressions.md`, `icons.md` (liste
 fermée, `star` et `calendar` y sont), `common-components.md`.
@@ -1110,3 +1110,148 @@ dans Claude via le connecteur MCP. Le serveur MCP n'a pas été redéployé, son
 être intacte.
 
 Testé ensuite par l'utilisateur : rendu OK.
+
+## 21. Canal retour depuis le LWC : `lightning/accApi` (2026-10-15)
+
+Question : la modal LWC de réservation peut-elle, comme le `action/sendMessage` du widget, renvoyer un
+message à l'agent au lieu de réserver en silence (§6) ? Réponse : oui, via le module documenté
+`lightning/accApi` (Agentforce Conversation Client API, API 59+, panneau natif de Lightning Experience
+uniquement) : `execute(utterance, botId)` envoie un texte « comme si l'utilisateur l'avait tapé ». Doc :
+https://developer.salesforce.com/docs/platform/accsdk/guide/acc-api.html. Points de la doc qui comptent :
+`botId` obligatoire pour `execute` (optionnel seulement pour `open`), pas de retour de la réponse de l'agent
+au composant, file d'exécution séquentielle, utterances en langage naturel uniquement (pas d'appel
+d'action par nom).
+
+Ce que le LWC ne sait pas : la cible `lightning__AgentforceOutput` ne fournit que `@api value` et les
+propriétés du `targetConfig`, toutes issues de la sortie de l'action. Aucun contexte (agent, session).
+
+Tests, sur l'agent en rendu LWC (`c__restaurantResponse`) :
+
+1. `execute(utterance)` **sans `botId`** : la promesse ne rejette pas (aucune erreur côté composant), mais
+   le panneau tombe en erreur, console `COPILOT_O11Y` : `Something went wrong. Refresh and try again.`
+   (×2). Rien dans le fil. Piste abandonnée.
+2. `execute(utterance, botId)` avec le `botId` résolu à l'exécution par Apex
+   (`AgentforcePanelController.getBotId('Restaurant_Agent')`, `SELECT Id FROM BotDefinition WHERE
+   DeveloperName = …`, préfixe `0Xx`) : **succès**. Toast côté LWC, message
+   `Book a table at Le Pré Catelan (restaurant Id a01…) on 2026-10-15 at 10:00` affiché dans le fil comme
+   message utilisateur, réponse de l'agent (en texte : pas encore d'action de réservation).
+
+Design retenu : la modal ne réserve pas, elle **demande** à l'agent (mêmes trois surfaces, un seul chemin
+de réservation, à implémenter côté agent : action `Book_Restaurant`, cf. commit `98cb116` de la branche
+d'exploration, à porter sans GenAiFunction). `restaurantBooking` émet maintenant `{date, time}` à chaque
+changement de jour ou de créneau (avant : l'heure seule).
+
+Limite restante : l'API name de l'agent est une constante dans la modal. Piste pour le rendre
+dynamique par agent : chaque agent passe son API name en entrée fixe de l'action et l'Apex le renvoie
+dans la sortie (TODO(unverified) : entrée à valeur littérale en Agent Script).
+
+Jest : `lightning/accApi` n'est pas stubbé par sfdx-lwc-jest, mock ajouté dans
+`force-app/test/jest-mocks/lightning/accApi.js` + `moduleNameMapper`. Échec préexistant et indépendant :
+`lightning/modal` n'est pas stubbé non plus, les suites `restaurantBookingModal` et `restaurantDetails`
+échouent au `import`.
+
+## 22. Réservation sur les trois surfaces : `BookRestaurantService` (2026-10-16)
+
+Portage de l'action d'août (commit `98cb116` de la branche d'exploration) au format sans GenAiFunction, plus
+une entrée LWC, pour que les trois surfaces (modal LWC, widget HXL dans Agentforce, widget dans Claude)
+aboutissent au même insert `Booking__c`.
+
+- **Apex** `BookRestaurantService` (`global with sharing`) : logique unique `createBooking(restaurantId,
+  Datetime)` ; `@AuraEnabled bookFromComponent(restaurantId, 'YYYY-MM-DD', 'HH:mm')` qui combine date et
+  heure dans le fuseau de l'utilisateur (`Datetime.newInstance(Date, Time)`, règle le point TZ de §5) ;
+  `@InvocableMethod bookRestaurant` qui parse l'ISO 8601 envoyé par le planner. `restaurantId` et
+  `bookingDateTime` tous deux `required=true`, descriptions qui disent où trouver l'Id (message du bouton)
+  et de demander date/heure si absentes : c'est ce schéma que Claude lit côté MCP.
+- **Agent Script** : action `Book_Restaurant` (`target: "apex://BookRestaurantService"`,
+  `require_user_confirmation: True`, `restaurantId` en `is_user_input: False`), instructions du subagent
+  complétées. Deploy du bundle, `sf agent publish authoring-bundle --skip-retrieve`, `sf agent activate` →
+  **version 8** active (la version précédente, en LWC, avait été éditée dans Agent Builder : bundle
+  `Restaurant_Agent_6` côté org, seule différence avec la source = la ligne `complex_data_type_name`).
+- **MCP** : second `<tools>` dans `restaurantsearchserver` → `aa:apex-BookRestaurantService`, sans
+  `uiResource`, `readOnly`/`idempotent`/`destructive` à `false`. Deux TODO(unverified) de la veille levés :
+  l'API Catalog expose la classe **immédiatement** après son deploy
+  (`GET /services/data/v68.0/actions/custom/apex/BookRestaurantService` : 2 inputs required, 2 outputs), et
+  le redeploy du `McpServerDefinition` **conserve l'activation** (Tooling `McpServerAccess.Active = true`
+  après deploy). Reste à vérifier côté Claude que le nouveau tool apparaît sans reconnecter le connecteur.
+
+**Modal LWC, trois modes de démo** (split button `lightning-button-group` + `lightning-button-menu`,
+mode mémorisé en `sessionStorage`, disponible sous LWS car partitionné par namespace, doc
+`lws-local-storage`) :
+
+| Mode | Effet | Ce que l'agent sait |
+|---|---|---|
+| `lwc` | insert Apex, rien vers l'agent | rien (sauf via une action de lecture des données) |
+| `lwcNotify` | insert Apex puis `execute("FYI, I just booked… do not book again")` | une utterance utilisateur, pas un événement |
+| `agent` | `execute("Book a table at …")`, pas d'insert | tout : c'est lui qui réserve, avec confirmation |
+
+Le widget HXL n'a pas ce choix : `sendMessage`, `openLink`, `toggleVisibility` seulement, donc toujours le
+mode `agent`. Il n'existe aucune API pour injecter un message système ou un résultat d'action dans le
+panneau : « informer l'agent » depuis l'UI est un détournement d'utterance, visible dans le fil comme si
+l'utilisateur l'avait tapé.
+
+### 22.1 Liens, confirmation et Trusted URLs (2026-10-16, suite)
+
+- `execute()` **attendu** par la modal : la promesse ne se résout qu'après le traitement de l'utterance
+  par le panneau (file séquentielle), donc après la réponse de l'agent. La modal restait ouverte tout
+  le tour. Passé en fire-and-forget, fermeture immédiate.
+- Parse ISO sans fuseau : `2026-10-16T10:00:00` envoyé par le planner était lu en UTC par
+  `JSON.deserialize` (point TZ du §5). `BookRestaurantService.parseIsoDateTime` reconstruit la date dans
+  le fuseau de l'utilisateur quand il n'y a ni offset ni `Z`. Vérifié : 10:00 Paris stocké 08:00 UTC.
+- Écran Confirm natif : phrase générée + liste brute des entrées avec leurs `label` du `.agent`. Labels
+  rendus lisibles (« Restaurant Id », « Booking date and time »). Aucune option Agent Script connue pour
+  masquer une entrée (TODO(unverified) : éditeur custom `lightning__AgentforceInput`).
+- Lien vers la réservation dans la réponse de l'agent, trois essais :
+  1. sortie `bookingId: string` + `complex_data_type_name: "lightning__recordIdType"` : accepté au
+     deploy et au publish, **aucun rendu lien** ; le modèle a inventé `https://salesforce.rel/<id>`.
+  2. sortie `bookingUrl` (URL complète construite en Apex, `…my.salesforce.com/lightning/r/…`) :
+     affichée **`URL_Redacted`**. Doc « Trust and Agentforce » : l'agent applique l'allowlist
+     **Trusted URLs** à ses réponses, toute URL hors allowlist est remplacée par `URL_Redacted`, et le
+     plan canvas signale l'URL bloquée. Le domaine Lightning de l'org (`…lightning.force.com`) n'est
+     **pas** implicitement autorisé : même résultat.
+  3. `CspTrustedSite` pour le domaine Lightning de l'org (contexte All, connect-src), déployé depuis
+     `tmp-hxl-trusted/` (gitignored : domaine spécifique à l'org). Résultat à confirmer par l'utilisateur.
+     Sur scratch org le domaine change à chaque création : à générer dans `createScratchOrg.sh` depuis
+     `sf org display --json`. Les widgets, eux, disposent de `{!$meta.env.orgUrl}` (bundle Playground).
+- Toast LWC : lien via `messageData` + `NavigationMixin.GenerateUrl` (doc Platform Show Toast Event),
+  supprimé en mode `agent` (le message est déjà dans le fil), gardé en vert pour les deux modes LWC.
+- Données : dix `Booking__c` de test purgés (`sf data delete bulk`), dont 5 sur le même créneau.
+
+## 23. Disponibilités : une source, trois surfaces (2026-10-16)
+
+HXL n'a **aucun composant de saisie** (22 composants `tile/*`, tous d'affichage ; interactions = clic sur
+`tile/button`, `tile/link`, cellules de `tile/table` ; actions `sendMessage`, `openLink`,
+`toggleVisibility` ; `meta.if` sur un booléen, pas de négation). Choisir un horaire passe donc par un
+aller-retour avec le modèle. Option retenue : action de disponibilités + widget de créneaux.
+
+- **Apex** `RestaurantAvailabilityService` (`global`) : créneaux de référence (constante, 12:00-13:30 et
+  19:00-21:00) moins les `Booking__c` du jour (bornes du jour dans le fuseau utilisateur, heures prises
+  via `format('HH:mm')`). DTO `Availability` (`restaurantId`, `restaurantName`, `bookingDate`,
+  `bookingDateLabel`, `hasSlots`, `hasNoSlots`, `slots[].startTime`). Entrée LWC `getSlots`
+  **non cacheable** (la dispo change à chaque réservation) ; invocable `getAvailability` avec Id **ou**
+  nom (LIKE) et date requise `YYYY-MM-DD`.
+- **Garde serveur** dans `BookRestaurantService.createBooking` : créneau déjà pris → `BookingException`
+  avec la référence existante ; relayée par la modal (rouge), l'agent et Claude (`confirmationMessage`).
+  Plus champ **`Booking__c.SlotKey__c`** unique (Id restaurant + `formatGmt('yyyy-MM-dd\'T\'HH:mm')`),
+  rempli par l'Apex ; `DUPLICATE_VALUE` attrapé et converti en message « réservé par quelqu'un d'autre ».
+  FLS des champs `Booking__c` ajoutée au permset (piège : un seul bloc `fieldPermissions`, sinon
+  « Element fieldPermissions is duplicated at this location »).
+- **Widget** `uiWidgets/restaurantSlots/` : titre, date, `tile/row isWrapped` de `tile/button` en
+  `forEach` sur `slots`, chaque bouton → `sendMessage("Book a table at <nom> (restaurant Id <id>) on
+  <date> at <heure>")` ; texte « No availability » sous `meta.if hasNoSlots`. Schéma conforme au
+  méta-schéma (`additionalProperties: false` aux deux niveaux) dès la création.
+- **CLT** : `restaurantAvailability` (Agentforce, `@apexClassType/c__RestaurantAvailabilityService$Availability`,
+  renderer racine → widget, 7 attributs mappés un à un) ; `restaurantAvailabilityMcpResult` +
+  `restaurantAvailabilityPayload` (rôle MCP, `lightning:tags: ["mcp"]`, bindings
+  `{!$attrs.outputValues.availability.<champ>}`).
+- **Agent** : action `Get_Availability`, sortie `availability` en `c__restaurantAvailability`, instructions
+  (« ne pas lister les créneaux en texte, ils sont affichés »). Publish → **version 12** active. L'agent
+  en rendu LWC pour la liste et HXL pour les créneaux : les deux cohabitent dans le même agent.
+- **MCP** : troisième tool `aa:apex-RestaurantAvailabilityService` (`readOnly`, `idempotent`) avec
+  `uiResource restaurantSlots` → `ui://widget/lightningType/c__restaurantAvailabilityMcpResult`. API
+  Catalog : `bookingDate` required, `restaurantId`/`restaurantName` optionnels, `availability` complexe.
+- **LWC** `restaurantBooking` : fini les neuf créneaux en dur ; appel impératif à `getSlots` à l'ouverture
+  et à chaque changement de jour, spinner, état vide, erreur, sélection réinitialisée (événement
+  `selected` avec `detail: null`).
+
+À tester : widget de créneaux dans Agentforce et dans Claude, clic créneau → confirmation → réservation,
+refus d'un doublon, modal LWC alimentée par l'Apex.

@@ -1,0 +1,19 @@
+{
+  "title": "Restaurant Availability Payload",
+  "description": "Output values of the RestaurantAvailabilityService invocable action (MCP payload role): one property per @InvocableMethod output variable.",
+  "type": "object",
+  "lightning:type": "lightning__objectType",
+  "lightning:tags": ["mcp"],
+  "unevaluatedProperties": false,
+  "properties": {
+    "availability": {
+      "title": "Availability",
+      "description": "Restaurant, date and available time slots",
+      "lightning:type": "@apexClassType/c__RestaurantAvailabilityService$Availability"
+    },
+    "message": {
+      "title": "Message",
+      "lightning:type": "lightning__textType"
+    }
+  }
+}
