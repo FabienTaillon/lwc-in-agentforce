@@ -62,9 +62,17 @@ subagent Restaurant_Management:
     reasoning:
         instructions: ->
             | Search for restaurants, and if none are returned, display a message saying none were found.
+              When the user asks for availability, free time slots or opening times of a restaurant, call Get_Availability with the date (deduce it from the conversation: today, tomorrow, January 3rd...) and the restaurant Id if known, otherwise the restaurant name. Ask for the date if it is missing. Do not list the time slots in text, they are displayed to the user.
+              When the user asks to book a table (for example a message starting with "Book a table at"), the message contains the restaurant Id.
+              Collect the date and the time of the booking if they are missing, offering to check availability with Get_Availability, then call Book_Restaurant.
+              After the booking, tell the user the confirmation message and the booking reference, and show the link to the booking record using exactly the bookingUrl value returned by Book_Restaurant. Never build or guess a URL.
         actions:
             Search_Restaurants: @actions.Search_Restaurants
                 with city = ...
+            Book_Restaurant: @actions.Book_Restaurant
+                with restaurantId = ..., bookingDateTime = ...
+            Get_Availability: @actions.Get_Availability
+                with restaurantId = ..., restaurantName = ..., bookingDate = ...
 
     actions:
         Search_Restaurants:
@@ -74,7 +82,6 @@ subagent Restaurant_Management:
             require_user_confirmation: False
             include_in_progress_indicator: True
             progress_indicator_message: "Searching restaurants"
-            source: "Search_Restaurants"
             target: "apex://RestaurantService"
                 
             inputs:
@@ -93,6 +100,93 @@ subagent Restaurant_Management:
                     is_displayable: True
                     filter_from_agent: False
                     complex_data_type_name: "c__restaurantResponse"
+
+        Get_Availability:
+            description: |
+                Get the available time slots of a restaurant for a given date
+            label: "Get Restaurant Availability"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Checking availability"
+            target: "apex://RestaurantAvailabilityService"
+
+            inputs:
+                "restaurantId": string
+                    description: |
+                      The Salesforce Id of the restaurant, when known (included in the "Book a table at ..." messages)
+                    label: "Restaurant Id"
+                    is_required: False
+                    is_user_input: False
+                "restaurantName": string
+                    description: |
+                      The name of the restaurant, when the Id is not known
+                    label: "Restaurant"
+                    is_required: False
+                    is_user_input: True
+                "bookingDate": string
+                    description: |
+                      The date to check, in YYYY-MM-DD format
+                    label: "Date"
+                    is_required: True
+                    is_user_input: True
+
+            outputs:
+                "availability": object
+                    description: |
+                      The restaurant, the date and the list of available time slots
+                    label: "Availability"
+                    is_displayable: True
+                    filter_from_agent: False
+                    complex_data_type_name: "c__restaurantAvailability"
+                "message": string
+                    description: |
+                      Summary of the availability, or the error if the restaurant or the date could not be resolved
+                    label: "Message"
+                    is_displayable: False
+                    filter_from_agent: False
+
+        Book_Restaurant:
+            description: |
+                Book a table at a restaurant for a given date and time
+            label: "Book Restaurant"
+            require_user_confirmation: True
+            include_in_progress_indicator: True
+            progress_indicator_message: "Booking the restaurant"
+            target: "apex://BookRestaurantService"
+
+            inputs:
+                "restaurantId": string
+                    description: |
+                      The Salesforce Id of the restaurant to book, included in the "Book a table at ..." message
+                    label: "Restaurant Id"
+                    is_required: True
+                    is_user_input: False
+                "bookingDateTime": string
+                    description: |
+                      The date and time of the booking, in ISO 8601 format
+                    label: "Booking date and time"
+                    is_required: True
+                    is_user_input: True
+
+            outputs:
+                "confirmationMessage": string
+                    description: |
+                      The confirmation or error message of the booking
+                    label: "Confirmation"
+                    is_displayable: True
+                    filter_from_agent: False
+                "bookingReference": string
+                    description: |
+                      The reference number of the created booking
+                    label: "Booking reference"
+                    is_displayable: True
+                    filter_from_agent: False
+                "bookingUrl": string
+                    description: |
+                      The link to the created booking record. Show this exact URL to the user, never build another one.
+                    label: "Booking link"
+                    is_displayable: True
+                    filter_from_agent: False
 
 subagent off_topic:
     label: "Off Topic"

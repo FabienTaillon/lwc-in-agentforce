@@ -1,0 +1,107 @@
+{
+  "type": "lightning__agentforceWidget",
+  "contentBody": {
+    "widgetBody": {
+      "definition": "tile/widget",
+      "children": [
+        {
+          "definition": "tile/column",
+          "attributes": {
+            "gap": "md"
+          },
+          "children": [
+            {
+              "definition": "tile/text",
+              "attributes": {
+                "text": "Available times at {!$attrs.restaurantName}",
+                "variant": "h3",
+                "weight": "semibold"
+              }
+            },
+            {
+              "definition": "tile/row",
+              "attributes": {
+                "gap": "sm",
+                "align": "center"
+              },
+              "children": [
+                {
+                  "definition": "tile/icon",
+                  "attributes": {
+                    "name": "calendar",
+                    "size": "sm",
+                    "alt": "Date"
+                  }
+                },
+                {
+                  "definition": "tile/text",
+                  "attributes": {
+                    "text": "{!$attrs.bookingDateLabel}",
+                    "variant": "body",
+                    "weight": "semibold"
+                  }
+                }
+              ]
+            },
+            {
+              "definition": "tile/text",
+              "meta": {
+                "if": "{!$attrs.hasSlots}"
+              },
+              "attributes": {
+                "text": "Pick a time to book your table:",
+                "variant": "caption",
+                "color": "muted"
+              }
+            },
+            {
+              "definition": "tile/row",
+              "meta": {
+                "if": "{!$attrs.hasSlots}"
+              },
+              "attributes": {
+                "gap": "sm",
+                "align": "center",
+                "isWrapped": true
+              },
+              "children": [
+                {
+                  "definition": "tile/button",
+                  "meta": {
+                    "forEach": "{!$attrs.slots}",
+                    "forItem": "$slot"
+                  },
+                  "attributes": {
+                    "label": "{!$slot.startTime}",
+                    "variant": "secondary",
+                    "actions": {
+                      "click": [
+                        {
+                          "definition": "action/sendMessage",
+                          "attributes": {
+                            "content": "Book a table at {!$attrs.restaurantName} (restaurant Id {!$attrs.restaurantId}) on {!$attrs.bookingDate} at {!$slot.startTime}"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "definition": "tile/text",
+              "meta": {
+                "if": "{!$attrs.hasNoSlots}"
+              },
+              "attributes": {
+                "text": "No availability on this day. Ask for another date.",
+                "variant": "body",
+                "color": "muted"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

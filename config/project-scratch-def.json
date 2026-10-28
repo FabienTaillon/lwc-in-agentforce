@@ -17,6 +17,9 @@
     },
     "CustomAddressFieldSettings": {
       "enableCustomAddressField": true
+    },
+    "uiWidgetSettings": {
+      "hxlEnabled": true
     }
   }
 }

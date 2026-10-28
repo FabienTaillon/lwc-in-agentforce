@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UiWidgetBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Restaurant Slots</masterLabel>
+    <description>Shows the available time slots of a restaurant for a given date, one button per slot that asks the agent to book it.</description>
+    <widgetType>JSON</widgetType>
+</UiWidgetBundle>

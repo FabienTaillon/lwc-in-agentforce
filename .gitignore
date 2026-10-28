@@ -43,3 +43,9 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# HXL: temporary deploy / retrieve dirs
+tmp-hxl*/
+
+# Local assistant settings and the Salesforce HXL Playground skill bundle (download it again from the Playground)
+.claude/

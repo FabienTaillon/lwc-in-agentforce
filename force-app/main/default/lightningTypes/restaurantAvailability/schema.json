@@ -1,0 +1,5 @@
+{
+  "title": "Restaurant Availability",
+  "description": "Available time slots of a restaurant for a date (RestaurantAvailabilityService.Availability), rendered by the HXL widget c/restaurantSlots in Agentforce.",
+  "lightning:type": "@apexClassType/c__RestaurantAvailabilityService$Availability"
+}

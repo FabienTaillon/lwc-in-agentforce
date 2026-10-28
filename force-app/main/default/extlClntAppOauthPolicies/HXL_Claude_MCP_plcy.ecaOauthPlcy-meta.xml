@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtlClntAppOauthConfigurablePolicies xmlns="http://soap.sforce.com/2006/04/metadata">
+    <externalClientApplication>HXL_Claude_MCP</externalClientApplication>
+    <isClientCredentialsFlowEnabled>false</isClientCredentialsFlowEnabled>
+    <label>HXL Claude MCP OAuth Policies</label>
+    <permittedUsersPolicyType>AllSelfAuthorized</permittedUsersPolicyType>
+</ExtlClntAppOauthConfigurablePolicies>

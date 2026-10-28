@@ -1,0 +1,22 @@
+{
+  "title": "Restaurant Search MCP Result",
+  "description": "Invocable-action result envelope returned by the Search Restaurants MCP tool (MCP result wrapper role).",
+  "type": "object",
+  "lightning:type": "lightning__objectType",
+  "lightning:tags": ["mcp"],
+  "unevaluatedProperties": false,
+  "properties": {
+    "actionName": {
+      "title": "Action Name",
+      "lightning:type": "lightning__textType"
+    },
+    "isSuccess": {
+      "title": "Is Success",
+      "lightning:type": "lightning__booleanType"
+    },
+    "outputValues": {
+      "title": "Output Values",
+      "lightning:type": "c__restaurantSearchPayload"
+    }
+  }
+}

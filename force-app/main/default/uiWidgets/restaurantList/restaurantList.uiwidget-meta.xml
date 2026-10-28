@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UiWidgetBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Restaurant List</masterLabel>
+    <description>Lists the restaurants returned by the Search Restaurants action (name, cuisine, Michelin stars, price range) with a Book a table button per restaurant.</description>
+    <widgetType>JSON</widgetType>
+</UiWidgetBundle>

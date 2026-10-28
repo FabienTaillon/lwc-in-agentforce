@@ -12,3 +12,6 @@ package.xml
 **/__tests__/**
 
 **/profiles/*.profile-meta.xml
+
+# macOS system files (a .DS_Store inside a bundle folder breaks the deploy)
+**/.DS_Store

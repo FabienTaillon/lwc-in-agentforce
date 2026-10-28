@@ -1,10 +1,30 @@
 <template>
-  <lightning-modal-header label={restaurantName}></lightning-modal-header>
+  <lightning-modal-header label={headerLabel}></lightning-modal-header>
   <lightning-modal-body>
     <c-restaurant-booking record-id={recordId} onselected={handleSelection}></c-restaurant-booking>
+    <template lwc:if={errorMessage}>
+      <p class="slds-text-color_error slds-m-top_small" role="alert">{errorMessage}</p>
+    </template>
   </lightning-modal-body>
   <lightning-modal-footer>
     <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
-    <lightning-button label="Book" variant="brand" class="slds-m-left_x-small" disabled={buttonDisabled} onclick={handleBook}></lightning-button>
+    <lightning-button-group class="slds-m-left_x-small">
+      <lightning-button variant="brand" label={bookLabel} disabled={buttonDisabled} onclick={handleBook}></lightning-button>
+      <lightning-button-menu
+        variant="border-filled"
+        alternative-text="Choose how to book"
+        menu-alignment="auto"
+        onselect={handleModeSelect}
+      >
+        <template for:each={modeOptions} for:item="option">
+          <lightning-menu-item
+            key={option.value}
+            value={option.value}
+            label={option.label}
+            checked={option.checked}
+          ></lightning-menu-item>
+        </template>
+      </lightning-button-menu>
+    </lightning-button-group>
   </lightning-modal-footer>
 </template>

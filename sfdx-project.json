@@ -8,5 +8,5 @@
   "name": "lwc-in-agentforce",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "67.0"
+  "sourceApiVersion": "68.0"
 }

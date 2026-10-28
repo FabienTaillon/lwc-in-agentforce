@@ -1,0 +1,47 @@
+{
+  "title": "Restaurant List Widget",
+  "description": "Attribute contract: the list of RestaurantService.Restaurant DTOs returned by RestaurantService (Restaurants.listRestaurants). Field names must match the Apex DTO exactly.",
+  "type": "object",
+  "properties": {
+    "attributes": {
+      "lightning:type": "lightning__objectType",
+      "properties": {
+        "restaurants": {
+          "title": "Restaurants",
+          "description": "Restaurants returned by RestaurantService (RestaurantService.Restaurant DTOs). A lightning__listType attribute requires an items sub-schema.",
+          "lightning:type": "lightning__listType",
+          "items": {
+            "title": "Restaurant",
+            "lightning:type": "lightning__objectType",
+            "properties": {
+              "id": {
+                "title": "Record Id",
+                "lightning:type": "lightning__textType"
+              },
+              "name": {
+                "title": "Name",
+                "lightning:type": "lightning__textType"
+              },
+              "stars": {
+                "title": "Michelin stars",
+                "description": "Picklist value 0 to 3",
+                "lightning:type": "lightning__textType"
+              },
+              "cuisine": {
+                "title": "Type of cuisine",
+                "description": "Comma separated",
+                "lightning:type": "lightning__textType"
+              },
+              "priceRange": {
+                "title": "Price range",
+                "lightning:type": "lightning__textType"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

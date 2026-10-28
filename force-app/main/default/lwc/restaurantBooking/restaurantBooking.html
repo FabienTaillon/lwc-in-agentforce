@@ -4,8 +4,19 @@
     <div class="slds-text-heading_medium">{dateDisplayedLabel}</div>
     <lightning-button label="Next Day" title="Next Day" icon-name="utility:forward" onclick={handleNextDay} icon-position="right" ></lightning-button>
   </div>
-  <fieldset class="slds-form-element" role="radiogroup">
-    <template lwc:if={availableTimes}>
+  <template lwc:if={isLoading}>
+    <div class="slds-is-relative slds-p-around_large">
+      <lightning-spinner alternative-text="Loading availability" size="small"></lightning-spinner>
+    </div>
+  </template>
+  <template lwc:if={errorMessage}>
+    <p class="slds-text-color_error slds-m-top_small" role="alert">{errorMessage}</p>
+  </template>
+  <template lwc:if={hasNoSlots}>
+    <p class="slds-text-color_weak slds-m-top_small">No availability on this day. Try another date.</p>
+  </template>
+  <template lwc:if={hasSlots}>
+    <fieldset class="slds-form-element" role="radiogroup">
       <legend class="slds-form-element__legend slds-form-element__label">Available Times</legend>
       <template for:each={availableTimes} for:item="time">
         <div key={time} class="slds-form-element__control slds-m-bottom_medium">
@@ -24,6 +35,6 @@
           </div>
         </div>
       </template>
-    </template>
-  </fieldset>
+    </fieldset>
+  </template>
 </template>

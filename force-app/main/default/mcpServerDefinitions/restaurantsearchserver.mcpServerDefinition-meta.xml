@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<McpServerDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Searches restaurants by city, renders them with the restaurantList HXL widget in MCP clients (Claude, ChatGPT), shows availability with the restaurantSlots widget, and books a table.</description>
+    <masterLabel>restaurant-search-server</masterLabel>
+    <tools>
+        <apiDefinition>
+            <apiIdentifier>aa:apex-RestaurantService</apiIdentifier>
+            <apiSource>API_CATALOG</apiSource>
+            <operation>RestaurantService</operation>
+        </apiDefinition>
+        <descriptionOverride>Search for restaurants in a given city. Returns name, cuisine, Michelin stars and price range.</descriptionOverride>
+        <destructive>false</destructive>
+        <idempotent>true</idempotent>
+        <openWorld>false</openWorld>
+        <readOnly>true</readOnly>
+        <returnDirect>false</returnDirect>
+        <toolName>RestaurantServiceapex_RestaurantService</toolName>
+        <toolTitle>Search Restaurants</toolTitle>
+        <uiResource>restaurantList</uiResource>
+    </tools>
+    <tools>
+        <apiDefinition>
+            <apiIdentifier>aa:apex-BookRestaurantService</apiIdentifier>
+            <apiSource>API_CATALOG</apiSource>
+            <operation>BookRestaurantService</operation>
+        </apiDefinition>
+        <descriptionOverride>Book a table at a restaurant. Requires the restaurant Id (included in the "Book a table at ..." message sent by the restaurant list) and the booking date and time in ISO 8601 format. Ask the user for the date and the time if they are not given. Returns a confirmation message and a booking reference.</descriptionOverride>
+        <destructive>false</destructive>
+        <idempotent>false</idempotent>
+        <openWorld>false</openWorld>
+        <readOnly>false</readOnly>
+        <returnDirect>false</returnDirect>
+        <toolName>BookRestaurantServiceapex_BookRestaurantService</toolName>
+        <toolTitle>Book Restaurant</toolTitle>
+    </tools>
+    <tools>
+        <apiDefinition>
+            <apiIdentifier>aa:apex-RestaurantAvailabilityService</apiIdentifier>
+            <apiSource>API_CATALOG</apiSource>
+            <operation>RestaurantAvailabilityService</operation>
+        </apiDefinition>
+        <descriptionOverride>Get the available time slots of a restaurant for a given date (YYYY-MM-DD). Provide the restaurant Id when known (included in the "Book a table at ..." messages), otherwise the restaurant name. Deduce the date from the conversation and ask the user if it is missing. The slots are displayed to the user as buttons, do not repeat them in text.</descriptionOverride>
+        <destructive>false</destructive>
+        <idempotent>true</idempotent>
+        <openWorld>false</openWorld>
+        <readOnly>true</readOnly>
+        <returnDirect>false</returnDirect>
+        <toolName>RestaurantAvailabilityServiceapex_RestaurantAvailabilityService</toolName>
+        <toolTitle>Get Restaurant Availability</toolTitle>
+        <uiResource>restaurantSlots</uiResource>
+    </tools>
+    <resources>
+        <resourceName>restaurantList</resourceName>
+        <resourceUri>ui://widget/lightningType/c__restaurantSearchMcpResult</resourceUri>
+        <resourceTitle>Restaurant List</resourceTitle>
+        <description>Widget listing the restaurants found, with a Book a table button per restaurant.</description>
+    </resources>
+    <resources>
+        <resourceName>restaurantSlots</resourceName>
+        <resourceUri>ui://widget/lightningType/c__restaurantAvailabilityMcpResult</resourceUri>
+        <resourceTitle>Restaurant Slots</resourceTitle>
+        <description>Widget showing the available time slots of a restaurant for a date, one button per slot to book it.</description>
+    </resources>
+</McpServerDefinition>
