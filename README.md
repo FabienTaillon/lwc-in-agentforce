@@ -37,6 +37,11 @@ The Salesforce side is fully handled by `createScratchOrg.sh`: the hosted MCP se
 
 Connecting Claude is a manual step on Claude's side, and its UI may change, so it isn't detailed here. What you need: the server URL printed by the script, and the consumer key of the External Client App (Setup → External Client App Manager → HXL Claude MCP → OAuth Settings) as OAuth client ID, with no client secret. Then add a custom connector in Claude with those two values, log in to the org when prompted, and ask for restaurants in a city: the result is rendered by the same HXL widget. The External Client App can take up to 30 minutes to be accepted by `api.salesforce.com` after deployment. Other MCP clients can use the same server; only the callback URL of the External Client App would need to match the client.
 
+Two things to know:
+
+- After redeploying the `McpServerDefinition` (a tool description change, for instance), Claude can keep serving the previous tool list for a few minutes. Wait or reconnect the connector, then start a new conversation.
+- On a non-scratch org, the server deploys inactive: activate it in Setup → MCP Servers → Activate.
+
 ### Going further
 
 Lab notebook with the verbatim errors and dead ends (in French): `docs/hxl-migration-notes.md`.
