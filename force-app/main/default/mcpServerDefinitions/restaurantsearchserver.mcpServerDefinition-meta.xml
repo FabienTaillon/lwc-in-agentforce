@@ -20,7 +20,7 @@
             <apiSource>API_CATALOG</apiSource>
             <operation>RestaurantService</operation>
         </apiDefinition>
-        <descriptionOverride>Search for restaurants in a given city. Returns name, cuisine, Michelin stars and price range.</descriptionOverride>
+        <descriptionOverride>Search for restaurants in a given city. Returns name, cuisine, Michelin stars and price range. The restaurants are displayed to the user as a list with a Book a table button, do not repeat them in text.</descriptionOverride>
         <destructive>false</destructive>
         <idempotent>true</idempotent>
         <openWorld>false</openWorld>
